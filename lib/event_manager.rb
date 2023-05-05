@@ -4,17 +4,35 @@ require 'csv'
 File.exist? "event_attendees.csv"
 small_csv = "event_attendees.csv"
 
-#!Look for a solution before beginning a solution
 contents = CSV.open(
     small_csv,
     headers: true,
     header_converters: :symbol
   )
-  
-  contents.each do |row|
+
+def clean_zipcode(zipcode)
+    #!an even more succient way to write it without all the extra if/else
+    zipcode.to_s.rjust(5, '0')[0..4]
+    # if zipcode.nil?
+    #     zipcode = '00000'
+    # elsif zipcode.length < 5
+    #     zipcode = zipcode.rjust(5, '0')
+    # elsif zipcode.length > 5
+    #     zipcode = zipcode[0..4]
+    # else
+    #     zipcode
+    # end
+end
+
+contents.each do |row|
     name = row[:first_name]
-    puts name
-  end
+    zipcode = clean_zipcode(row[:zipcode])
+    #*Use pseudocode for Cleaning up problem areas
+    #if the zip code is exactly five digits we can assume that it is okay
+    #is the zip code is more than five digits, truncate it to the first five digits
+    #if the zip code is less than five digits, add zeroes to the front until it becomes five digits
+    puts "#{name}, #{zipcode}"
+end
 # lines = File.readlines(small_csv)
 # lines.each_with_index do |line, idx|
 #     next if idx == 0
